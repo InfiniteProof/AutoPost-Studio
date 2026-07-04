@@ -32,7 +32,7 @@ and add these products:
 
 Add the following as a Redirect URI on your TikTok app — this must be exact:
 ```
-https://infiniteproof.github.io/AutoPost-Studio/callback
+https://autopost-studio.github.io/callback.html
 ```
 
 > **Why a GitHub Pages URL?** TikTok requires a publicly accessible HTTPS
