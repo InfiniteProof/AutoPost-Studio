@@ -32,7 +32,7 @@ and add these products:
 
 Add the following as a Redirect URI on your TikTok app — this must be exact:
 ```
-https://autopost-studio.github.io/callback.html
+https://infiniteproof.github.io/AutoPost-Studio/callback
 ```
 
 > **Why a GitHub Pages URL?** TikTok requires a publicly accessible HTTPS
@@ -97,4 +97,10 @@ you'll land on the review screen.
 
 ## License
 
-MIT — see `LICENSE`.
+AutoPost-Studio is licensed under the **Business Source License 1.1**.
+
+- Free to download, run, and modify for personal, non-commercial use.
+- Commercial use (selling it, building a paid hosted service on top of it, etc.) requires a separate license.
+- On January 1, 2028, the license automatically converts to MIT.
+
+See `LICENSE` for the full terms. For commercial licensing, contact [infiniteproof9@gmail.com](mailto:infiniteproof9@gmail.com).
