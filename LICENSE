@@ -1,21 +1,51 @@
-MIT License
+Business Source License 1.1
 
-Copyright (c) 2026 InfiniteProof
+Licensor: InfiniteProof
+Licensed Work: AutoPost-Studio
+Change Date: January 1, 2028
+Change License: MIT License
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Use Limitation:
+The Licensed Work may not be used for Commercial Use without a separate
+written license from the Licensor.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+"Commercial Use" means:
+- Offering the Licensed Work or a product substantially derived from it
+  as a paid or monetized service to third parties.
+- Using the Licensed Work to build or operate a hosted service that
+  other users pay to access.
+- Selling, sublicensing, or otherwise commercializing the Licensed Work
+  or any substantial portion of it.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Personal and internal use is permitted free of charge, including:
+- Running your own copy of AutoPost-Studio on your own device to post
+  to your own TikTok account.
+- Modifying the Licensed Work for your own personal use.
+- Distributing unmodified copies for non-commercial purposes, provided
+  this license is included.
+
+On the Change Date, the Licensed Work will automatically become available
+under the MIT License, at which point the above Commercial Use restriction
+will no longer apply.
+
+For commercial licensing inquiries, contact: infiniteproof9@gmail.com
+
+---
+
+Additional Restriction (Commons Clause):
+Without limiting the above, the rights granted here do not include the
+right to Sell the Software. "Sell" means practicing any or all of the
+rights granted to you under this License to provide to third parties,
+for a fee or other consideration, a product or service whose value
+derives, entirely or substantially, from the functionality of the
+Software.
+
+---
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
