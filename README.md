@@ -32,7 +32,7 @@ and add these products:
 
 Add the following as a Redirect URI on your TikTok app — this must be exact:
 ```
-https://infiniteproof.github.io/AutoPost-Studio/callback
+https://autopost-studio.github.io/callback.html
 ```
 
 > **Why a GitHub Pages URL?** TikTok requires a publicly accessible HTTPS
@@ -51,6 +51,14 @@ pip install flask requests
 ```
 
 ### 3. Set your environment variables
+
+If you're running this app as part of the parent pipeline project, just fill
+in `TIKTOK_CLIENT_KEY` / `TIKTOK_CLIENT_SECRET` in `support/.env` (one folder
+up from this file) — `app.py` loads it automatically.
+
+Running `app.py` standalone (outside the parent project)? Either put a
+`.env` file next to `app.py` with the same two keys, or export them the
+usual way:
 
 ```bash
 # macOS/Linux
@@ -97,10 +105,4 @@ you'll land on the review screen.
 
 ## License
 
-AutoPost-Studio is licensed under the **Business Source License 1.1**.
-
-- Free to download, run, and modify for personal, non-commercial use.
-- Commercial use (selling it, building a paid hosted service on top of it, etc.) requires a separate license.
-- On January 1, 2028, the license automatically converts to MIT.
-
-See `LICENSE` for the full terms. For commercial licensing, contact [infiniteproof9@gmail.com](mailto:infiniteproof9@gmail.com).
+MIT — see `LICENSE`.
