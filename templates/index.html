@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AutoPost-Studio</title>
+<style>
+  :root {
+    --ink: #15171a;
+    --paper: #fafaf8;
+    --line: #e4e2dd;
+    --accent: #fe2c55; /* TikTok-adjacent red, used sparingly */
+    --muted: #8b8d92;
+    --ok: #0a7d4e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 18px 48px;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 0 18px;
+  }
+  header .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent);
+  }
+  header h1 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  header .subtitle {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+  footer.app-footer {
+    text-align: center;
+    padding: 24px 0 8px;
+    font-size: 0.76rem;
+    color: var(--muted);
+  }
+  footer.app-footer a {
+    color: var(--muted);
+  }
+
+  .creator-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 16px;
+  }
+  .creator-row img {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--line);
+    object-fit: cover;
+  }
+  .creator-row .name {
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .creator-row .sub {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+
+  video {
+    width: 100%;
+    border-radius: 14px;
+    background: #000;
+    display: block;
+    margin-bottom: 14px;
+    max-height: 65vh;
+  }
+
+  .caption-box {
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin-bottom: 22px;
+    color: #333;
+  }
+
+  section.block {
+    margin-bottom: 20px;
+  }
+  .block-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  select.privacy-select {
+    width: 100%;
+    padding: 13px 14px;
+    font-size: 0.95rem;
+    border-radius: 10px;
+    border: 1.5px solid var(--line);
+    background: white;
+    color: var(--ink);
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  select.privacy-select:invalid,
+  select.privacy-select.placeholder {
+    color: var(--muted);
+  }
+  select.privacy-select:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 13px 14px;
+    margin-bottom: 8px;
+  }
+  .toggle-row.disabled { opacity: 0.45; }
+  .toggle-row .label { font-size: 0.92rem; }
+  .toggle-row .hint { font-size: 0.74rem; color: var(--muted); margin-top: 2px; }
+
+  .switch {
+    position: relative;
+    width: 46px; height: 27px;
+    flex-shrink: 0;
+  }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .switch .track {
+    position: absolute; inset: 0;
+    background: var(--line);
+    border-radius: 999px;
+    transition: background 0.15s;
+    cursor: pointer;
+  }
+  .switch .track::before {
+    content: "";
+    position: absolute;
+    width: 21px; height: 21px;
+    left: 3px; top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.15s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.25);
+  }
+  .switch input:checked + .track { background: var(--accent); }
+  .switch input:checked + .track::before { transform: translateX(19px); }
+  .switch input:disabled + .track { cursor: not-allowed; }
+
+  textarea.caption-box {
+    width: 100%;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+  }
+  textarea.caption-box:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+  }
+  .brand-preview {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin: -2px 0 8px 2px;
+  }
+
+  .consent-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: white;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 18px;
+  }
+  .consent-row input[type="checkbox"] {
+    width: 19px; height: 19px;
+    margin-top: 1px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+  }
+  .consent-row label {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    color: #333;
+  }
+
+  button.publish-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    border: none;
+    background: var(--ink);
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  button.publish-btn:disabled {
+    background: var(--line);
+    color: var(--muted);
+    cursor: not-allowed;
+  }
+  button.publish-btn:not(:disabled):active {
+    transform: scale(0.98);
+  }
+
+  .status-msg {
+    margin-top: 14px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 0.86rem;
+    display: none;
+  }
+  .status-msg.show { display: block; }
+  .status-msg.ok { background: #e8f5ee; color: var(--ok); }
+  .status-msg.err { background: #fdebec; color: #b3261e; }
+
+  .empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="app">
+  <header>
+    <div class="dot"></div>
+    <div>
+      <h1>AutoPost-Studio</h1>
+      <div class="subtitle">Post to TikTok</div>
+    </div>
+  </header>
+  <div id="content">Loading…</div>
+  <footer class="app-footer">
+    <a href="https://autopost-studio.github.io/" target="_blank" rel="noopener">autopost-studio.github.io</a>
+  </footer>
+</div>
+
+<script>
+function escapeHtml(s) {
+  return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+async function loadReview() {
+  const res = await fetch('/api/review-video');
+  const data = await res.json();
+  const content = document.getElementById('content');
+
+  if (!data.connected) {
+    content.innerHTML = `
+      <div class="empty-state">
+        <p style="margin-bottom:18px;">No TikTok account connected yet.</p>
+        <button class="publish-btn" id="connectBtn" style="background:var(--accent);">Connect TikTok Account</button>
+      </div>`;
+    document.getElementById('connectBtn').addEventListener('click', () => {
+      window.location.href = '/auth/login';
+    });
+    return;
+  }
+
+  if (!data.video) {
+    content.innerHTML = `<div class="empty-state">No video waiting for review right now.</div>`;
+    return;
+  }
+
+  const creator = data.creator_info;
+  const creatorError = data.creator_error;
+
+  let creatorHtml = '';
+  if (creator) {
+    creatorHtml = `
+      <div class="creator-row">
+        <img src="${creator.creator_avatar_url || ''}" alt="">
+        <div style="flex:1;">
+          <div class="name">${creator.creator_nickname || creator.creator_username || 'Your account'}</div>
+          <div class="sub">Posting to @${creator.creator_username || ''}</div>
+        </div>
+        <button id="disconnectBtn" style="border:none;background:none;color:var(--muted);font-size:0.78rem;cursor:pointer;text-decoration:underline;">Disconnect</button>
+      </div>`;
+  } else {
+    console.error('creator_info error:', creatorError);
+    creatorHtml = `
+      <div class="creator-row">
+        <div class="name" style="color:#b3261e;">You can't post right now</div>
+        <div class="sub" style="color:#b3261e;">${creatorError || 'Please try again later.'}</div>
+      </div>`;
+  }
+
+  const privacyOptions = (creator && creator.privacy_level_options) || [];
+  const commentDisabled = creator && creator.comment_disabled;
+  const duetDisabled = creator && creator.duet_disabled;
+  const stitchDisabled = creator && creator.stitch_disabled;
+  const maxDuration = creator && creator.max_video_post_duration_sec;
+  const videoDuration = data.video.duration_sec;
+  const overDuration = maxDuration && videoDuration && videoDuration > maxDuration;
+
+  const privacyLabels = {
+    "PUBLIC_TO_EVERYONE": "Everyone",
+    "MUTUAL_FOLLOW_FRIENDS": "Friends",
+    "FOLLOWER_OF_CREATOR": "Followers",
+    "SELF_ONLY": "Only me"
+  };
+
+  content.innerHTML = `
+    ${creatorHtml}
+
+    <video src="/api/video-file" controls playsinline></video>
+
+    <section class="block">
+      <div class="block-label">Title</div>
+      <textarea class="caption-box" id="titleInput" rows="3" placeholder="Add a caption...">${escapeHtml(data.video.caption)}</textarea>
+    </section>
+
+    ${overDuration ? `<div class="status-msg show err">This video is ${Math.round(videoDuration)}s, but this account's limit is ${Math.round(maxDuration)}s — TikTok will reject it. Publishing is disabled.</div>` : ''}
+
+    <section class="block">
+      <div class="block-label">Who can watch this</div>
+      <select class="privacy-select placeholder" id="privacySelect">
+        <option value="" disabled selected>Choose privacy setting</option>
+        ${privacyOptions.map(p => `<option value="${p}">${privacyLabels[p] || p}</option>`).join('')}
+      </select>
+    </section>
+
+    <section class="block">
+      <div class="block-label">Allow viewers to</div>
+
+      <div class="toggle-row ${commentDisabled ? 'disabled' : ''}" id="commentRow">
+        <div>
+          <div class="label">Comment</div>
+          ${commentDisabled ? '<div class="hint">Turned off in your TikTok account settings</div>' : ''}
+        </div>
+        <div class="switch">
+          <input type="checkbox" id="toggleComment" ${commentDisabled ? 'disabled' : ''}>
+          <label class="track" for="toggleComment"></label>
+        </div>
+      </div>
+
+      <div class="toggle-row ${duetDisabled ? 'disabled' : ''}" id="duetRow">
+        <div>
+          <div class="label">Duet</div>
+          <div class="hint" id="duetHint">${duetDisabled ? 'Turned off in your TikTok account settings' : ''}</div>
+        </div>
+        <div class="switch">
+          <input type="checkbox" id="toggleDuet" ${duetDisabled ? 'disabled' : ''}>
+          <label class="track" for="toggleDuet"></label>
+        </div>
+      </div>
+
+      <div class="toggle-row ${stitchDisabled ? 'disabled' : ''}" id="stitchRow">
+        <div>
+          <div class="label">Stitch</div>
+          <div class="hint" id="stitchHint">${stitchDisabled ? 'Turned off in your TikTok account settings' : ''}</div>
+        </div>
+        <div class="switch">
+          <input type="checkbox" id="toggleStitch" ${stitchDisabled ? 'disabled' : ''}>
+          <label class="track" for="toggleStitch"></label>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="block-label">Commercial content</div>
+
+      <div class="toggle-row" id="discloseRow">
+        <div>
+          <div class="label">Disclose commercial content</div>
+          <div class="hint">Turn on if this promotes yourself, a brand, product, or service</div>
+        </div>
+        <div class="switch">
+          <input type="checkbox" id="toggleDisclose">
+          <label class="track" for="toggleDisclose"></label>
+        </div>
+      </div>
+
+      <div id="brandOptions" style="display:none;">
+        <div class="toggle-row" id="yourBrandRow">
+          <div>
+            <div class="label">Your brand</div>
+            <div class="hint">You're promoting yourself or your own business</div>
+          </div>
+          <div class="switch">
+            <input type="checkbox" id="toggleYourBrand">
+            <label class="track" for="toggleYourBrand"></label>
+          </div>
+        </div>
+        <div class="toggle-row" id="brandedContentRow">
+          <div>
+            <div class="label">Branded content</div>
+            <div class="hint" id="brandedContentHint">You're promoting another brand or a third party</div>
+          </div>
+          <div class="switch">
+            <input type="checkbox" id="toggleBrandedContent">
+            <label class="track" for="toggleBrandedContent"></label>
+          </div>
+        </div>
+        <div class="brand-preview" id="brandLabelPreview"></div>
+      </div>
+    </section>
+
+    <div class="consent-row">
+      <input type="checkbox" id="consentCheck">
+      <label for="consentCheck"><span id="consentText">I confirm this video is mine to post and I want to publish it to TikTok now. By posting, I agree to TikTok's Music Usage Confirmation.</span></label>
+    </div>
+
+    <button class="publish-btn" id="publishBtn" disabled>Publish to TikTok</button>
+    <div class="status-msg" id="statusMsg"></div>
+  `;
+
+  wireUpControls(duetDisabled, stitchDisabled, overDuration);
+}
+
+function wireUpControls(duetDisabledByAccount, stitchDisabledByAccount, overDuration) {
+  const disconnectBtn = document.getElementById('disconnectBtn');
+  if (disconnectBtn) {
+    disconnectBtn.addEventListener('click', async () => {
+      await fetch('/auth/disconnect', { method: 'POST' });
+      loadReview();
+    });
+  }
+
+  const privacySelect = document.getElementById('privacySelect');
+  const consentCheck = document.getElementById('consentCheck');
+  const consentText = document.getElementById('consentText');
+  const publishBtn = document.getElementById('publishBtn');
+  const duetRow = document.getElementById('duetRow');
+  const stitchRow = document.getElementById('stitchRow');
+  const toggleDuet = document.getElementById('toggleDuet');
+  const toggleStitch = document.getElementById('toggleStitch');
+  const duetHint = document.getElementById('duetHint');
+  const stitchHint = document.getElementById('stitchHint');
+  const toggleDisclose = document.getElementById('toggleDisclose');
+  const brandOptions = document.getElementById('brandOptions');
+  const toggleYourBrand = document.getElementById('toggleYourBrand');
+  const toggleBrandedContent = document.getElementById('toggleBrandedContent');
+  const brandedContentRow = document.getElementById('brandedContentRow');
+  const brandedContentHint = document.getElementById('brandedContentHint');
+  const brandLabelPreview = document.getElementById('brandLabelPreview');
+
+  const MUSIC_CONSENT = "I confirm this video is mine to post and I want to publish it to TikTok now. By posting, I agree to TikTok's Music Usage Confirmation.";
+  const BRANDED_CONSENT = "I confirm this video is mine to post and I want to publish it to TikTok now. By posting, I agree to TikTok's Branded Content Policy and Music Usage Confirmation.";
+
+  function refreshButtonState() {
+    const hasPrivacy = privacySelect.value !== '';
+    const discloseOk = !toggleDisclose.checked || (toggleYourBrand.checked || toggleBrandedContent.checked);
+    publishBtn.title = discloseOk ? '' : 'You need to indicate if your content promotes yourself, a third party, or both.';
+    publishBtn.disabled = overDuration || !(hasPrivacy && consentCheck.checked && discloseOk);
+  }
+
+  // Duet/Stitch remix a video into something new and public — that's not a
+  // sensible combination with a private ("Only me") post, so TikTok's own
+  // app disables them there too. This is the actual interaction between
+  // privacy settings and interaction settings the audit wants demonstrated:
+  // choosing a privacy level changes which interaction settings are even
+  // selectable, live, not just two independently-static form sections.
+  function applyPrivacyInteractionRules() {
+    const isPrivate = privacySelect.value === 'SELF_ONLY';
+    const duetOff = duetDisabledByAccount || isPrivate;
+    const stitchOff = stitchDisabledByAccount || isPrivate;
+
+    toggleDuet.disabled = duetOff;
+    toggleStitch.disabled = stitchOff;
+    if (duetOff) toggleDuet.checked = false;
+    if (stitchOff) toggleStitch.checked = false;
+    duetRow.classList.toggle('disabled', duetOff);
+    stitchRow.classList.toggle('disabled', stitchOff);
+    duetHint.textContent = duetDisabledByAccount ? 'Turned off in your TikTok account settings'
+      : (isPrivate ? 'Not available for private videos' : '');
+    stitchHint.textContent = stitchDisabledByAccount ? 'Turned off in your TikTok account settings'
+      : (isPrivate ? 'Not available for private videos' : '');
+  }
+
+  // Branded content can only be public/friends — same two-way interaction
+  // pattern as duet/stitch, just against the branded-content checkbox
+  // instead of the privacy dropdown's own options.
+  function applyBrandRules() {
+    const isPrivate = privacySelect.value === 'SELF_ONLY';
+
+    toggleBrandedContent.disabled = isPrivate;
+    brandedContentRow.classList.toggle('disabled', isPrivate);
+    if (isPrivate && toggleBrandedContent.checked) toggleBrandedContent.checked = false;
+    brandedContentHint.textContent = isPrivate
+      ? "Branded content visibility can't be set to private."
+      : "You're promoting another brand or a third party";
+
+    const selfOnlyOption = privacySelect.querySelector('option[value="SELF_ONLY"]');
+    if (selfOnlyOption) {
+      selfOnlyOption.disabled = toggleBrandedContent.checked;
+      selfOnlyOption.title = toggleBrandedContent.checked
+        ? 'Branded content visibility cannot be set to private.' : '';
+    }
+
+    const yourBrand = toggleYourBrand.checked;
+    const branded = toggleBrandedContent.checked;
+    if (yourBrand && branded) {
+      brandLabelPreview.textContent = "Your photo/video will be labeled as 'Paid partnership'";
+    } else if (branded) {
+      brandLabelPreview.textContent = "Your photo/video will be labeled as 'Paid partnership'";
+    } else if (yourBrand) {
+      brandLabelPreview.textContent = "Your photo/video will be labeled as 'Promotional content'";
+    } else {
+      brandLabelPreview.textContent = '';
+    }
+
+    consentText.textContent = branded ? BRANDED_CONSENT : MUSIC_CONSENT;
+  }
+
+  privacySelect.addEventListener('change', () => {
+    privacySelect.classList.remove('placeholder');
+    applyPrivacyInteractionRules();
+    applyBrandRules();
+    refreshButtonState();
+  });
+  consentCheck.addEventListener('change', refreshButtonState);
+
+  toggleDisclose.addEventListener('change', () => {
+    brandOptions.style.display = toggleDisclose.checked ? 'block' : 'none';
+    if (!toggleDisclose.checked) {
+      toggleYourBrand.checked = false;
+      toggleBrandedContent.checked = false;
+    }
+    applyBrandRules();
+    refreshButtonState();
+  });
+  toggleYourBrand.addEventListener('change', () => { applyBrandRules(); refreshButtonState(); });
+  toggleBrandedContent.addEventListener('change', () => { applyBrandRules(); refreshButtonState(); });
+
+  applyBrandRules();
+  if (overDuration) publishBtn.disabled = true;
+
+  publishBtn.addEventListener('click', async () => {
+    publishBtn.disabled = true;
+    publishBtn.textContent = 'Publishing…';
+
+    const body = {
+      privacy_level: privacySelect.value,
+      title: document.getElementById('titleInput').value,
+      allow_comment: document.getElementById('toggleComment').checked,
+      allow_duet: document.getElementById('toggleDuet').checked,
+      allow_stitch: document.getElementById('toggleStitch').checked,
+      consent_given: consentCheck.checked,
+      content_disclosure: toggleDisclose.checked,
+      your_brand: toggleYourBrand.checked,
+      branded_content: toggleBrandedContent.checked
+    };
+
+    const statusMsg = document.getElementById('statusMsg');
+    try {
+      const res = await fetch('/api/publish', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        statusMsg.textContent = `Published! It may take a few minutes to process before it appears on your profile. Status: ${data.status || 'processing'}`;
+        statusMsg.className = 'status-msg show ok';
+        publishBtn.textContent = 'Published';
+      } else {
+        statusMsg.textContent = data.error || 'Something went wrong.';
+        statusMsg.className = 'status-msg show err';
+        publishBtn.textContent = 'Publish to TikTok';
+        publishBtn.disabled = false;
+      }
+    } catch (e) {
+      statusMsg.textContent = 'Network error: ' + e.message;
+      statusMsg.className = 'status-msg show err';
+      publishBtn.textContent = 'Publish to TikTok';
+      publishBtn.disabled = false;
+    }
+  });
+}
+
+loadReview();
+</script>
+
+</body>
+</html>

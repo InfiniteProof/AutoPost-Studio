@@ -53,8 +53,9 @@ pip install flask requests
 ### 3. Set your environment variables
 
 If you're running this app as part of the parent pipeline project, just fill
-in `TIKTOK_CLIENT_KEY` / `TIKTOK_CLIENT_SECRET` in `support/.env` (one folder
-up from this file) — `app.py` loads it automatically.
+in `TIKTOK_CLIENT_KEY` / `TIKTOK_CLIENT_SECRET` in `credentials/.env` (two
+folders up from this file, alongside the rest of the pipeline's tokens) —
+`app.py` loads it automatically.
 
 Running `app.py` standalone (outside the parent project)? Either put a
 `.env` file next to `app.py` with the same two keys, or export them the
@@ -95,8 +96,9 @@ you'll land on the review screen.
 
 - This app only ever talks to TikTok's own API directly — there's no
   middleman server.
-- Access tokens are saved locally to `tiktok_token.json` and are never
-  uploaded anywhere.
+- Access tokens are saved locally to `tiktok_token.json` (in `credentials/`
+  when run as part of the parent pipeline project, or next to `app.py` when
+  run standalone) and are never uploaded anywhere.
 - TikTok requires Direct Post integrations to go through an audit before
   posts can be public; until then, posts are restricted to private
   (`SELF_ONLY`) viewing. See TikTok's

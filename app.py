@@ -49,11 +49,16 @@ def _load_env():
     """Load KEY=VALUE lines from a central .env file into os.environ, so this
     app draws its keys from the same place as the rest of the pipeline
     instead of needing them exported in the shell. Checks this script's own
-    folder first (for standalone use), then the parent project folder.
-    Not shared with common.py on purpose — this file is designed to also run
-    standalone, outside the parent project."""
+    folder first (for standalone use), then the parent project's credentials/
+    folder (support/tiktok_review_ui/../../credentials/.env).
+    Not shared with pipeline_helpers.py on purpose — this file is designed to
+    also run standalone, outside the parent project."""
     here = os.path.dirname(os.path.abspath(__file__))
-    for candidate in (os.path.join(here, ".env"), os.path.join(here, "..", ".env")):
+    for candidate in (
+        os.path.join(here, ".env"),
+        os.path.join(here, "..", ".env"),
+        os.path.join(here, "..", "..", "credentials", ".env"),
+    ):
         if os.path.exists(candidate):
             with open(candidate, "r", encoding="utf-8") as f:
                 for line in f:
@@ -439,7 +444,11 @@ def api_publish():
 
 @app.route("/")
 def index():
-    return send_file("templates/index.html")
+    # Absolute path, not "templates/index.html" — a relative path only
+    # resolves when the process's CWD happens to be this exact folder,
+    # which breaks for anyone launching this standalone tool a different
+    # way (e.g. `python support/tiktok_review_ui/app.py` from elsewhere).
+    return send_file(os.path.join(os.path.dirname(os.path.abspath(__file__)), "templates", "index.html"))
 
 
 if __name__ == "__main__":
